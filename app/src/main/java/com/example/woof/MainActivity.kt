@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,10 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.woof.model.Dog
 import com.example.woof.model.dogs
 import com.example.woof.ui.theme.WoofTheme
+import dogs
+import androidx.compose.ui.tooling.preview.Preview as Preview1
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,9 +59,14 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
  */
 @Composable
 fun WoofApp() {
-    LazyColumn {
-        items(dogs) {
-            DogItem(dog = it)
+    Scaffold { it ->
+        LazyColumn(contentPadding = it) {
+            items(dog) {
+                DogItem(
+                    dog = it,
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                )
+            }
         }
     }
 }
@@ -73,16 +82,16 @@ fun DogItem(
     dog: Dog,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_small))
-    ) {
-        DogIcon(dog.imageResourceId)
-        DogInformation(dog.name, dog.age)
+    Card() {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(id = R.dimen.padding_small))
+        ) {
+            DogIcon(dog.imageResourceId)
+            DogInformation(dog.name, dog.age)
+        }
     }
-}
-
 /**
  * Composable that displays a photo of a dog.
  *
@@ -130,10 +139,23 @@ fun DogInformation(
         )
     }
 }
-@Preview
+@Preview1
 @Composable
 fun WoofPreview() {
     WoofTheme(darkTheme = false) {
         WoofApp()
     }
+    @Preview1
+    @Composable
+    fun WoofDarkThemePreview() {
+        WoofTheme(darkTheme = true) {
+            WoofApp()
+        }
+    }
+    @Composable
+    fun WoofTheme(
+        darkTheme: Boolean = isSystemInDarkTheme(),
+        dynamicColor: Boolean = true,
+        content: @Composable () -> Unit
+    )
 }

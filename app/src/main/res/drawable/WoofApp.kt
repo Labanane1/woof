@@ -9,12 +9,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Card
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.example.woof.DogIcon
+import com.example.woof.DogInformation
 import com.example.woof.R
 import com.example.woof.model.Dog
 import com.example.woof.model.dogs
@@ -24,9 +28,14 @@ import com.example.woof.model.dogs
  */
 @Composable
 fun WoofApp() {
-    LazyColumn {
-        items(dogs) {
-            DogItem(dog = it)
+    Scaffold { it ->
+        LazyColumn(contentPadding = it) {
+            items(dog) {
+                DogItem(
+                    dog = it,
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                )
+            }
         }
     }
 }
@@ -42,15 +51,17 @@ fun DogItem(
     dog: Dog,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_small))
-    ) {
-        DogIcon(dog.imageResourceId)
-        DogInformation(dog.name, dog.age)
+    Card(modifier = modifier) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(id = R.dimen.padding_small))
+        ) {
+            DogIcon(dog.imageResourceId)
+            DogInformation(dog.name, dog.age)
+        }
     }
-}
+
 
 /**
  * Composable that displays a photo of a dog.
